@@ -1,19 +1,19 @@
-# tuneup
+# TuneUp
 
-## Project setup
-```
-npm install
-```
+Ova aplikacija korisnicima omogućuje slušanje glazbe i izradu popisa za reprodukciju.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### Autor
 
-### Compiles and minifies for production
-```
-npm run build
-```
+- Robert Vidaković - rvidakovic@unipu.hr
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Prototip aplikacije
+
+Figma: https://www.figma.com/proto/O1dBpx83CVfH7PIWfyAhH7/TuneUp?node-id=6-178
+
+
+### Organizacija
+
+[Sveučilište Jurja Dobrile u Puli](https://www.unipu.hr/) 
+[Fakultet informatike u Puli](https://fipu.unipu.hr/)
+Kolegij: [Programsko inženjerstvo](http://ntankovic.unipu.hr/pi)
+Mentor: [doc. dr. sc. Nikola Tanković](ntankovic.unipu.hr)
