@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Login from '../views/Login.vue';
 import MusicPlayer from '../views/MusicPlayer.vue';
 import SongList from '../views/SongList.vue';
+import Favorites from '../views/Favorites.vue';
 
 Vue.use(VueRouter);
 
@@ -22,7 +23,11 @@ const routes = [
         name: 'songList',
         component: SongList
     },
-
+    {
+        path: '/favorites',
+        name: 'Favorites',
+        component: Favorites
+    },
 ];
 
 const router = new VueRouter({

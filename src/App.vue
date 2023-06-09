@@ -12,7 +12,8 @@
 
     <v-main>
       <!--class="phone-screen"-->
-      <router-view />
+      <router-view :favorites="favorites" :list="list" @song-selected="updateList" />
+
     </v-main>
 
     <v-card>
@@ -20,7 +21,6 @@
         <v-btn value="login" to="/">
           <span>Login</span>
           <v-icon>mdi-login</v-icon>
-
         </v-btn>
 
         <v-btn value="songlist" to="/songlist">
@@ -40,10 +40,12 @@
 </template>  
 
 <script>
-//import { RouterView } from 'vue-router';
+import { RouterView } from 'vue-router';
 import SongList from './views/SongList.vue';
+import Favorites from './views/Favorites.vue';
 import store from "@/store"
 import { onAuthStateChanged, auth } from "@/firebase"
+import { list } from 'firebase/storage';
 
 onAuthStateChanged(auth, user => {
   console.log("PROMJENA KORISNIKA", user)
@@ -54,10 +56,19 @@ export default {
   name: 'App',
 
   data: () => ({
-    activePage: "home"
+    activePage: '/songlist',
+    favorites: [],
+    list: []
   }),
+  methods: {
+    updateList(song) {
+      this.list = [song]; // Update the list with the selected song
+    },
+  },
+  components: {
+    RouterView,
 
-
+  }
 }
 </script>
 

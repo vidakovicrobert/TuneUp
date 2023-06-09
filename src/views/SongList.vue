@@ -21,10 +21,21 @@
                                         song.albumName }} ({{ song.year }})</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-col>
+                            <v-col cols="1">
+                                <v-btn icon :class="{ 'purple--text': isFavorite(song.id) }"
+                                    @click.stop="toggleFavorite(song.id)">
+                                    <v-icon>{{ isFavorite(song.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+                                </v-btn>
+
+                            </v-col>
                         </v-row>
                     </v-list-item>
                 </v-list>
             </v-container>
+
+            <Favorites :list="list" :favorites="favorites"></Favorites>
+
+
         </div>
         <div v-if="isPlayerVisible">
             <MusicPlayer :song="list[currentSongIndex]" @goback="isPlayerVisible = !isPlayerVisible" @next="playNext"
@@ -35,6 +46,7 @@
 
 <script>
 import MusicPlayer from './MusicPlayer.vue';
+import Favorites from './Favorites.vue';
 
 export default {
     data() {
@@ -69,11 +81,13 @@ export default {
                     src: `https://source.unsplash.com/random/400x400?date=3`,
                     songSrc: `https://filesamples.com/samples/audio/mp3/sample1.mp3`
                 }
-            ]
+            ],
+            favorites: []
         }
     },
     methods: {
         playSong(index) {
+            this.$emit('song-selected', this.list[index]);
             this.currentSongIndex = index;
             this.isPlayerVisible = true;
         },
@@ -90,10 +104,22 @@ export default {
             } else {
                 this.currentSongIndex = this.list.length - 1;
             }
-        }
+        },
+        toggleFavorite(songId) {
+            const index = this.favorites.indexOf(songId);
+            if (index === -1) {
+                this.favorites.push(songId); // Add to favorites
+            } else {
+                this.favorites.splice(index, 1); // Remove from favorites
+            }
+        },
+        isFavorite(songId) {
+            return this.favorites.includes(songId);
+        },
     },
     components: {
-        MusicPlayer
+        MusicPlayer,
+        Favorites,
     },
     name: 'SongList'
 }

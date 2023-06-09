@@ -4,12 +4,13 @@
             <v-sheet width="400" class="mx-auto">
                 <v-form fast-fail @submit.prevent="login">
 
-                    <v-text-field v-model="username" :rules="nameRules" label="Username" required></v-text-field>
+                    <v-text-field v-model="username" :rules="nameRules" color="purple" label="Username"
+                        required></v-text-field>
 
-                    <v-text-field v-model="password" label="Password"></v-text-field>
+                    <v-text-field v-model="password" color="purple" label="Password"></v-text-field>
                     <a href="#" class="text-body-2 font-weight-regular">Forgot Password?</a>
 
-                    <v-btn type="submit" color="primary" block class="mt-2">Sign in</v-btn>
+                    <v-btn type="submit" color="purple lighten-2" block class="mt-2">Sign in</v-btn>
 
                 </v-form>
 
@@ -17,7 +18,7 @@
                     <p class="text-body-2">Don't have an account? <a href="#">Sign Up</a></p>
                 </div>
                 <div class="mt-2">
-                    <v-btn type="submit" color="primary" @click="logout" block class="mt-2">Log out</v-btn>
+                    <v-btn type="submit" color="purple lighten-2" @click="logout" block class="mt-2">Log out</v-btn>
                 </div>
                 {{ store.current_user }}
 
