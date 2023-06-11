@@ -5,7 +5,7 @@
             <v-list>
                 <v-list-item v-for="(song, index) in getFavoriteSongs()" :key="index">
                     <v-list-item-content>
-                        <v-row align="center">
+                        <v-row>
                             <v-col cols="2">
                                 <v-img :src="song.src" height="60" contain></v-img>
                             </v-col>

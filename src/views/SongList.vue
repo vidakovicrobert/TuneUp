@@ -3,7 +3,9 @@
         <div v-if="!isPlayerVisible">
             <v-container class="py-8">
                 <v-row align="center" justify="end">
-                    <span class="purple--text">Music App</span>
+                    <v-col cols="4">
+                        <span class="purple--text">Music App</span>
+                    </v-col>
                     <!-- TODO hamburger menu i dodaci -->
                 </v-row>
             </v-container>
@@ -21,21 +23,10 @@
                                         song.albumName }} ({{ song.year }})</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-col>
-                            <v-col cols="1">
-                                <v-btn icon :class="{ 'purple--text': isFavorite(song.id) }"
-                                    @click.stop="toggleFavorite(song.id)">
-                                    <v-icon>{{ isFavorite(song.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
-                                </v-btn>
-
-                            </v-col>
                         </v-row>
                     </v-list-item>
                 </v-list>
             </v-container>
-
-            <Favorites :list="list" :favorites="favorites"></Favorites>
-
-
         </div>
         <div v-if="isPlayerVisible">
             <MusicPlayer :song="list[currentSongIndex]" @goback="isPlayerVisible = !isPlayerVisible" @next="playNext"
@@ -45,8 +36,9 @@
 </template>  
 
 <script>
+import 'firebase/compat/firestore';
 import MusicPlayer from './MusicPlayer.vue';
-import Favorites from './Favorites.vue';
+
 
 export default {
     data() {
@@ -82,7 +74,7 @@ export default {
                     songSrc: `https://filesamples.com/samples/audio/mp3/sample1.mp3`
                 }
             ],
-            favorites: []
+
         }
     },
     methods: {
@@ -105,21 +97,9 @@ export default {
                 this.currentSongIndex = this.list.length - 1;
             }
         },
-        toggleFavorite(songId) {
-            const index = this.favorites.indexOf(songId);
-            if (index === -1) {
-                this.favorites.push(songId); // Add to favorites
-            } else {
-                this.favorites.splice(index, 1); // Remove from favorites
-            }
-        },
-        isFavorite(songId) {
-            return this.favorites.includes(songId);
-        },
     },
     components: {
         MusicPlayer,
-        Favorites,
     },
     name: 'SongList'
 }

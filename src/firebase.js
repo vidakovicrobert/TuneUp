@@ -46,5 +46,5 @@ export {
     uploadBytes,
     getDownloadURL,
     signOut,
-    updatePassword
+    updatePassword,
 }

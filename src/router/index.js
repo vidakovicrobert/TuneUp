@@ -4,6 +4,7 @@ import Login from '../views/Login.vue';
 import MusicPlayer from '../views/MusicPlayer.vue';
 import SongList from '../views/SongList.vue';
 import Favorites from '../views/Favorites.vue';
+import Register from '../views/Register.vue';
 
 Vue.use(VueRouter);
 
@@ -26,7 +27,12 @@ const routes = [
     {
         path: '/favorites',
         name: 'Favorites',
-        component: Favorites
+        component: Favorites,
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register
     },
 ];
 

@@ -1,23 +1,39 @@
 <template>
   <v-app>
     <v-app-bar app color dark>
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
-      <v-spacer></v-spacer>
+      <!--<v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>-->
 
       <v-toolbar-title>TuneUp</v-toolbar-title>
 
       <v-spacer></v-spacer>
+
+      <v-btn value="login" to="/">
+        <span>Login</span>
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+
+      <v-btn value="songlist" to="/songlist">
+        <span>Song List</span>
+        <v-icon>mdi-playlist-music</v-icon>
+      </v-btn>
+
+      <v-btn value="favorites" to="/favorites">
+        <span>Favorites</span>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+
+      <v-spacer></v-spacer>
+
     </v-app-bar>
 
     <v-main>
-      <!--class="phone-screen"-->
-      <router-view :favorites="favorites" :list="list" @song-selected="updateList" />
-
+      <router-view class="phone-screen" :list="list" :favorites="favorites" @song-selected="updateList" />
     </v-main>
-
+    <!--
     <v-card>
       <v-bottom-navigation v-model="activePage" dark>
+
         <v-btn value="login" to="/">
           <span>Login</span>
           <v-icon>mdi-login</v-icon>
@@ -35,14 +51,12 @@
 
       </v-bottom-navigation>
     </v-card>
-
+    -->
   </v-app>
 </template>  
 
 <script>
 import { RouterView } from 'vue-router';
-import SongList from './views/SongList.vue';
-import Favorites from './views/Favorites.vue';
 import store from "@/store"
 import { onAuthStateChanged, auth } from "@/firebase"
 import { list } from 'firebase/storage';
@@ -56,19 +70,19 @@ export default {
   name: 'App',
 
   data: () => ({
-    activePage: '/songlist',
+    activePage: '/',
     favorites: [],
     list: []
   }),
   methods: {
     updateList(song) {
-      this.list = [song]; // Update the list with the selected song
+      this.list = [song];
     },
   },
   components: {
     RouterView,
 
-  }
+  },
 }
 </script>
 
