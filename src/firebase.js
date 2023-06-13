@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app'
-import { doc, addDoc, getDoc, setDoc, getDocs, getCount, getFirestore, collection } from 'firebase/firestore/lite'
+import { doc, addDoc, getDoc, setDoc, getCount, getFirestore, collection } from 'firebase/firestore'
 import { getAuth, updatePassword, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, confirmPasswordReset, beforeAuthStateChanged, onAuthStateChanged } from 'firebase/auth'
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from 'firebase/storage'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Import the functions you need from the SDKs you need
@@ -26,12 +26,13 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const storage = getStorage(app);
+const storage = getStorage();
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
 export {
-    app, auth, storage,
+    app, auth,
+    storage,
     getAuth,
     db,
     doc,

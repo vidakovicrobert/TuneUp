@@ -70,6 +70,7 @@ export default {
             try {
                 let response = await signInWithEmailAndPassword(auth, this.username, this.password)
                 console.log("SIGN IN", response);
+                this.$router.push("/songlist");
             } catch (error) {
                 // Handle login error
                 console.error(error);
