@@ -2,7 +2,7 @@
 import firebase from 'firebase/compat/app'
 import { doc, addDoc, getDoc, setDoc, getCount, getFirestore, collection } from 'firebase/firestore'
 import { getAuth, updatePassword, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, confirmPasswordReset, beforeAuthStateChanged, onAuthStateChanged } from 'firebase/auth'
-import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from 'firebase/storage'
+import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, deleteObject } from 'firebase/storage'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Import the functions you need from the SDKs you need
@@ -48,4 +48,5 @@ export {
     getDownloadURL,
     signOut,
     updatePassword,
+    deleteObject,
 }

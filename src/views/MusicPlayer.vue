@@ -119,9 +119,6 @@ export default {
             return this.favorites.includes(songId);
         },
     },
-    components: {
-        Favorites,
-    },
 }
 
 </script>

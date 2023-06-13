@@ -43,6 +43,9 @@
                                         song.albumName }} ({{ song.year }})</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-col>
+                            <v-col cols="3">
+                                <v-btn color="error" small @click.stop="removeSong(song.id)">Remove</v-btn>
+                            </v-col>
                         </v-row>
                     </v-list-item>
                     <!-- Display the added song -->
@@ -55,6 +58,9 @@
                                 <v-list-item-content>
                                     <v-list-item-title class="purple--text">{{ selectedFile.name }}</v-list-item-title>
                                 </v-list-item-content>
+                            </v-col>
+                            <v-col cols="1">
+                                <v-btn color="error" small @click.stop="removeSong(songId)">Remove</v-btn>
                             </v-col>
                         </v-row>
                     </v-list-item>
@@ -72,15 +78,21 @@
 </template>  
 
 <script>
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, doc, addDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase.js';
-import { ref, uploadBytes, getDownloadURL, storage, getStorage } from '@/firebase';
+import { ref, uploadBytes, getDownloadURL, deleteObject, storage, getStorage } from '@/firebase';
 import 'firebase/compat/firestore';
 import MusicPlayer from './MusicPlayer.vue';
 
 
 export default {
     name: 'SongList',
+    created() {
+        const storedSongs = JSON.parse(localStorage.getItem('userSongs'));
+        if (storedSongs) {
+            this.userSongs = storedSongs;
+        }
+    },
     data() {
         return {
             isPlayerVisible: false,
@@ -88,7 +100,7 @@ export default {
             favorites: [],
             list: [
                 {
-                    id: 1,
+                    id: 'predefined-1',
                     name: 'Cheap Thrills',
                     artistName: 'Adam Lambert',
                     albumName: 'Everything',
@@ -97,7 +109,7 @@ export default {
                     songSrc: `https://filesamples.com/samples/audio/mp3/sample2.mp3`
                 },
                 {
-                    id: 2,
+                    id: 'predefined-2',
                     name: 'Lean on',
                     artistName: 'Adam Levine',
                     albumName: 'Going Down',
@@ -106,7 +118,7 @@ export default {
                     songSrc: `https://filesamples.com/samples/audio/mp3/sample3.mp3`
                 },
                 {
-                    id: 3,
+                    id: 'predefined-3',
                     name: 'Counting Stars',
                     artistName: 'Adam Hart',
                     albumName: 'Spice It Up',
@@ -139,44 +151,109 @@ export default {
                 this.currentSongIndex = this.list.length - 1;
             }
         },
+
+
+        // FIX not deleting document !!!
+
+
+        removeSong(songId) {
+            const songIndex = this.userSongs.findIndex((song) => song.id === songId);
+            if (songIndex === -1) return;
+
+            const song = this.userSongs[songIndex];
+            this.userSongs.splice(songIndex, 1);
+            localStorage.setItem('userSongs', JSON.stringify(this.userSongs));
+
+            // Delete the song file from Firebase Storage
+            const storageRef = ref(storage, `songs/${songId}/${song.file.name}`);
+            deleteObject(storageRef)
+                .then(() => {
+                    console.log('File deleted successfully');
+
+                    // Delete the Firestore document
+                    const songDocRef = doc(db, 'songs', songId);
+                    console.log('Deleting Firestore document:', songDocRef.path);
+                    deleteDoc(songDocRef)
+                        .then(() => {
+                            console.log('Firestore document deleted successfully');
+                        })
+                        .catch((error) => {
+                            console.error('Error deleting Firestore document:', error);
+                        });
+                })
+                .catch((error) => {
+                    console.error('Error deleting file:', error);
+                });
+        },
+
         addSong() {
+            // Check if a file is selected
+            if (!this.selectedFile) {
+                return;
+            }
+
             const newSong = {
-                id: this.userSongs.length + 1,
+                id: 'user-' + Date.now(),
                 name: 'New Song',
                 artistName: 'Artist',
                 albumName: 'Album',
                 year: 2023,
                 src: 'https://source.unsplash.com/random/400x400?date=new',
-                songSrc: '',
+                songSrc: 'https://example.com/new-song.mp3',
                 file: this.selectedFile,
             };
 
-            // Add the new song to userSongs array and Firestore
+            // Update the userSongs array and store it in browser storage
             this.userSongs.push(newSong);
-            const songsCollection = collection(db, 'songs');
-            addDoc(songsCollection, newSong)
-                .then(() => console.log('New song added to Firestore'))
-                .catch((error) => console.error('Error adding song:', error));
+            localStorage.setItem('userSongs', JSON.stringify(this.userSongs));
 
             // Upload the file to Firebase Storage
             const storageRef = ref(storage, `songs/${newSong.id}/${newSong.file.name}`);
             uploadBytes(storageRef, newSong.file)
-                .then(() => console.log('File uploaded successfully'))
-                .catch((error) => console.error('Error uploading file:', error));
-            // Clear the selected file after successful submission
-            this.selectedFile = null;
+                .then(() => {
+                    console.log('File uploaded successfully');
+
+                    // Get the download URL of the uploaded file
+                    getDownloadURL(storageRef)
+                        .then((downloadURL) => {
+                            newSong.file = {
+                                name: newSong.file.name,
+                                downloadURL: downloadURL,
+                            };
+
+                            // Clear the selected file after successful submission
+                            this.selectedFile = null;
+
+                            // Add the new song to Firestore
+                            const songsCollection = collection(db, 'songs');
+                            addDoc(songsCollection, newSong)
+                                .then(() => {
+                                    console.log('New song added to Firestore');
+                                })
+                                .catch((error) => {
+                                    console.error('Error adding song:', error);
+                                });
+                        })
+                        .catch((error) => {
+                            console.error('Error getting download URL:', error);
+                        });
+                })
+                .catch((error) => {
+                    console.error('Error uploading file:', error);
+                });
         },
 
         submitFile() {
             if (this.selectedFile) {
                 const newSong = {
-                    id: this.userSongs.length + 1,
-                    name: this.selectedFile.name.replace(/^\d+\.\s*/, "").replace(/\.[^.]+$/, ""), // Extract the file name without the extension
+                    id: 'user-' + Date.now(),
+                    name: this.selectedFile.name.replace(/^\d+\.\s*/, "").replace(/\.[^.]+$/, ""),
                     artistName: '',
                     albumName: '',
-                    year: null, //new Date().getFullYear(),
+                    year: null,
                     src: 'https://source.unsplash.com/random/400x400?date=new',
-                    songSrc: '',
+                    songSrc: 'https://example.com/new-song.mp3',
+                    file: this.selectedFile,
                 };
 
                 // Upload the file to Firebase Storage
@@ -188,7 +265,13 @@ export default {
                         // Get the download URL of the uploaded file
                         getDownloadURL(storageRef)
                             .then((downloadURL) => {
-                                newSong.file = downloadURL;
+                                newSong.file = {
+                                    name: this.selectedFile.name,
+                                    downloadURL: downloadURL,
+                                };
+
+                                // Clear the selected file after successful submission
+                                this.selectedFile = null;
 
                                 // Add the new song to Firestore
                                 const songsCollection = collection(db, 'songs');
@@ -196,11 +279,9 @@ export default {
                                     .then(() => {
                                         console.log('New song added to Firestore');
 
-                                        // Clear the selected file after successful submission
-                                        this.selectedFile = null;
-
-                                        // Update userSongs array with the new song
+                                        // Update the userSongs array and store it in browser storage
                                         this.userSongs.push(newSong);
+                                        localStorage.setItem('userSongs', JSON.stringify(this.userSongs));
                                     })
                                     .catch((error) => {
                                         console.error('Error adding song:', error);
@@ -215,6 +296,7 @@ export default {
                     });
             }
         }
+
     },
     components: {
         MusicPlayer,
