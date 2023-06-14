@@ -4,7 +4,7 @@
             <v-container class="py-8">
                 <v-row align="center" justify="space-between">
                     <v-col cols="3" class="">
-                        <v-btn color="red" @click="goback" rounded>
+                        <v-btn color="red" icon @click="goback" rounded>
                             <v-icon>mdi-arrow-left</v-icon>
                         </v-btn>
                     </v-col>

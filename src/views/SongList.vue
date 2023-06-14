@@ -1,12 +1,33 @@
 <template>
-    <v-card height="640px">
+    <v-card>
         <div v-if="!isPlayerVisible">
             <v-container class="py-8">
-                <v-row align="center" justify="end">
+                <v-row align="center" justify="center">
+                    <v-dialog v-model="dialog" :max-width="expanded ? '800px' : '350px'">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-col cols="8">
+                                <v-btn color="red darken-2" icon v-bind="attrs" v-on="on">
+                                    <v-icon>mdi-playlist-plus</v-icon>
+                                </v-btn>
+                            </v-col>
+                        </template>
+
+                        <v-card class="card-border" outlined>
+                            <v-card-title>Add a Song</v-card-title>
+                            <v-card-text>
+                                <v-file-input v-model="selectedFile" label="Select File" color="gray" outlined
+                                    dense></v-file-input>
+                                <v-btn color="purple lighten-2" @click="submitFile">Submit</v-btn>
+                            </v-card-text>
+
+                        </v-card>
+                    </v-dialog>
+
                     <v-col cols="4">
                         <span class="purple--text">Music App</span>
                     </v-col>
                     <!-- TODO hamburger menu i dodaci -->
+
                 </v-row>
             </v-container>
             <v-container>
@@ -27,48 +48,33 @@
                     </v-list-item>
                 </v-list>
             </v-container>
+
             <v-container v-if="userSongs.length > 0 || selectedFile">
-                <h2 class="purple--text mt-6">Added Songs</h2>
                 <v-list>
+                    <h3 class="purple--text mt-6">Added Songs</h3>
                     <v-list-item v-for="(song, songIndex) in userSongs" :key="song.id"
                         @click="playSong(list.length + songIndex)">
                         <v-row align="center">
                             <v-col cols="2">
                                 <v-img :src="song.src" height="60" contain></v-img>
                             </v-col>
-                            <v-col cols="9">
+                            <v-col cols="6">
                                 <v-list-item-content>
                                     <v-list-item-title class="purple--text">{{ song.name }}</v-list-item-title>
                                     <v-list-item-subtitle class="grey--text text--darken-1">{{ song.artistName }} - {{
                                         song.albumName }} ({{ song.year }})</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-col>
-                            <v-col cols="3">
-                                <v-btn color="error" small @click.stop="removeSong(song.id)">Remove</v-btn>
+                            <v-col cols="4">
+                                <v-btn color="error" icon x-small @click.stop="removeSong(song.id)">
+                                    <v-icon>mdi-delete-outline</v-icon>
+                                </v-btn>
                             </v-col>
                         </v-row>
                     </v-list-item>
-                    <!-- Display the added song -->
-                    <v-list-item v-if="selectedFile">
-                        <v-row align="center">
-                            <v-col cols="2">
-                                <v-img :src="selectedFile.src" height="60" contain></v-img>
-                            </v-col>
-                            <v-col cols="9">
-                                <v-list-item-content>
-                                    <v-list-item-title class="purple--text">{{ selectedFile.name }}</v-list-item-title>
-                                </v-list-item-content>
-                            </v-col>
-                            <v-col cols="1">
-                                <v-btn color="error" small @click.stop="removeSong(songId)">Remove</v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-list-item>
+
                 </v-list>
             </v-container>
-            <v-file-input v-model="selectedFile" label="Select File" outlined dense></v-file-input>
-            <v-btn color="primary" @click="submitFile">Submit</v-btn>
-
         </div>
         <div v-if="isPlayerVisible">
             <MusicPlayer :song="list[currentSongIndex]" :favorites="favorites" @goback="isPlayerVisible = !isPlayerVisible"
@@ -129,6 +135,8 @@ export default {
             ],
             userSongs: [],
             selectedFile: null,
+            dialog: false,
+            expanded: false,
         }
     },
     methods: {
@@ -154,7 +162,6 @@ export default {
 
 
         // FIX not deleting document !!!
-
 
         removeSong(songId) {
             const songIndex = this.userSongs.findIndex((song) => song.id === songId);
@@ -295,6 +302,8 @@ export default {
                         console.error('Error uploading file:', error);
                     });
             }
+            this.dialog = false;
+
         }
 
     },
@@ -303,3 +312,23 @@ export default {
     },
 }
 </script>
+
+<style>
+.card-border {
+    padding: 2%;
+}
+
+.card-text-border {
+    padding: 2.5%;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.btn-right-margin {
+    margin-right: 2%;
+}
+</style>

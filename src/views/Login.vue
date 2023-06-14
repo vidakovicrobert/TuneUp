@@ -18,7 +18,8 @@
                                     :type="showIcon ? 'text' : 'password'" @click:append="showIcon = !showIcon"
                                     outlined></v-text-field>
 
-                                <a href="#" class="text-body-2 font-weight-regular">Forgot Password?</a>
+                                <a href="#" class="text-body-2 font-weight-regular" @click="forgotPassword">Forgot
+                                    Password?</a>
                                 <v-btn type="submit" color="purple lighten-2" block class="mt-2">Log in</v-btn>
                                 <p class="text-body-2">Don't have an account? <a href="/Register">Sign Up</a></p>
 
@@ -35,7 +36,7 @@
 </template>
  
 <script>
-import { signInWithEmailAndPassword, signOut } from "@/firebase"
+import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "@/firebase"
 import { auth } from "@/firebase";
 import store from "@/store";
 
@@ -75,7 +76,17 @@ export default {
                 // Handle login error
                 console.error(error);
             }
-        }
+        },
+        async forgotPassword() {
+            try {
+                await sendPasswordResetEmail(auth, this.username);
+                console.log("Password reset email sent successfully.");
+                // Show a notification or redirect to a confirmation page
+            } catch (error) {
+                // Handle error sending password reset email
+                console.error(error);
+            }
+        },
     }
 };
 </script>
