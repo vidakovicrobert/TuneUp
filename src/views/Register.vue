@@ -36,7 +36,8 @@
 </template>
 
 <script>
-import { doc, auth, db, setDoc, createUserWithEmailAndPassword } from "@/firebase.js";
+import { doc, auth, db, setDoc, docRef, createUserWithEmailAndPassword } from "@/firebase.js";
+import { collection } from "@firebase/firestore";
 export default {
     name: "Registration",
     components: {},
@@ -76,19 +77,20 @@ export default {
             this.$router.push({ path: "/songlist" });
         },
         async saveAdditionalData(user, email, username) {
-            await setDoc(doc(db, "users", email), {
+            const userRef = collection(db, "users");
+            const docRef = doc(userRef, user.uid);
+
+            await setDoc(docRef, {
                 Email: email,
                 UserName: username,
                 AuthorisationType: "USER",
             });
         },
         registerUser() {
-            //debugger;
             const email = this.email;
             const password = this.password;
             createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    //debugger;
                     const user = userCredential.user;
                     const username = this.username;
                     this.saveAdditionalData(user, email, username);

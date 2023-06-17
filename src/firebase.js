@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app'
-import { doc, addDoc, getDoc, setDoc, getCount, getFirestore, collection } from 'firebase/firestore'
+import { doc, addDoc, getDoc, setDoc, deleteDoc, getCount, getFirestore, collection, onSnapshot } from 'firebase/firestore'
 import { getAuth, updatePassword, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, confirmPasswordReset, beforeAuthStateChanged, onAuthStateChanged } from 'firebase/auth'
 import { getStorage, ref, uploadBytes, uploadString, getDownloadURL, deleteObject } from 'firebase/storage'
 // TODO: Add SDKs for Firebase products that you want to use
@@ -31,7 +31,8 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
 export {
-    app, auth,
+    app,
+    auth,
     storage,
     getAuth,
     db,
@@ -39,6 +40,7 @@ export {
     getDoc,
     setDoc,
     addDoc,
+    deleteDoc,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     sendPasswordResetEmail,
@@ -49,4 +51,6 @@ export {
     signOut,
     updatePassword,
     deleteObject,
+    collection,
+    onSnapshot,
 }

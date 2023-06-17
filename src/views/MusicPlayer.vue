@@ -14,7 +14,6 @@
                             <v-icon>{{ isFavorite(song.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
                         </v-btn>
                     </v-col>
-
                 </v-row>
             </v-container>
             <v-container>
@@ -41,7 +40,6 @@
                             <v-icon>{{ isPlaying ? 'mdi-pause' : 'mdi-play' }}</v-icon>
                         </v-btn>
                     </v-col>
-
                     <v-col cols="3" class="text-center">
                         <v-btn color="" @click="next" rounded>
                             <v-icon>mdi-skip-next</v-icon>
@@ -49,19 +47,20 @@
                     </v-col>
                 </v-row>
             </v-container>
-
         </v-card>
         <favorites :list="list" :favorites="favorites" @toggle-favorite="toggleFavorite" />
     </div>
 </template>
-  
-  
+    
+    
 <script>
 import Favorites from './Favorites.vue';
+import 'firebase/firestore';
 export default {
     data() {
         return {
-            isPlaying: true
+            isPlaying: true,
+            currentSongIndex: 0,
         }
     },
     name: 'MusicPlayer',
@@ -70,21 +69,24 @@ export default {
     },
     props: {
         song: {
-            id: Number,
-            name: String,
-            artistName: String,
-            albumName: String,
-            year: Number,
-            src: String,
-            songSrc: String
+            type: Object,
+            default: () => ({
+                id: 0,
+                name: '',
+                artistName: '',
+                albumName: '',
+                year: '',
+                src: '',
+                songSrc: ''
+            }),
         },
         favorites: {
             type: Array,
-            default: () => []
+            default: () => [],
         },
         list: {
             type: Array,
-            default: () => []
+            default: () => [],
         }
     },
     emits: ['goback', 'next', 'previous'],
@@ -122,5 +124,5 @@ export default {
 }
 
 </script>
-  
+    
 <style></style>

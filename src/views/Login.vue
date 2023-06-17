@@ -37,7 +37,7 @@
  
 <script>
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "@/firebase"
-import { auth } from "@/firebase";
+import { auth } from "@/firebase.js";
 import store from "@/store";
 
 export default {
@@ -45,7 +45,7 @@ export default {
     data() {
         return {
             username: 'bob@test.com',
-            password: '123456',
+            password: '1234567',
             store: store,
             rules: {
                 required: (value) => !!value || "Required.",

@@ -90,9 +90,7 @@ export default {
 .phone-screen {
   background-color: #000;
   width: 360px;
-  /* Adjust the width as needed */
   height: 640px;
-  /* Adjust the height as needed */
   margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
