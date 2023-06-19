@@ -1,5 +1,6 @@
 <template>
-    <div><audio :src="song.songSrc" preload="auto" autoplay ref="audioPlayer" />
+    <div>
+        <audio :src="song.songSrc" preload="auto" autoplay ref="audioPlayer"></audio>
         <v-card height="640px">
             <v-container class="py-8">
                 <v-row align="center" justify="space-between">
@@ -67,6 +68,11 @@ export default {
     components: {
         Favorites
     },
+    computed: {
+        isFavorite() {
+            return (songId) => this.checkFavorite(songId);
+        },
+    },
     props: {
         song: {
             type: Object,
@@ -112,12 +118,12 @@ export default {
         toggleFavorite(songId) {
             const index = this.favorites.indexOf(songId);
             if (index === -1) {
-                this.favorites.push(songId); // Add to favorites
+                this.favorites.push(songId);
             } else {
-                this.favorites.splice(index, 1); // Remove from favorites
+                this.favorites.splice(index, 1);
             }
         },
-        isFavorite(songId) {
+        checkFavorite(songId) {
             return this.favorites.includes(songId);
         },
     },
