@@ -1,7 +1,7 @@
 <template>
     <div>
         <audio :src="song.songSrc" preload="auto" autoplay ref="audioPlayer"></audio>
-        <v-card height="640px">
+        <v-card height="640px" style="background-color: #171717;">
             <v-container class="py-8">
                 <v-row align="center" justify="space-between">
                     <v-col cols="3" class="">
@@ -11,7 +11,8 @@
                     </v-col>
                     <!-- TODO search button -->
                     <v-col cols="2">
-                        <v-btn icon :class="{ 'purple--text': isFavorite(song.id) }" @click.stop="toggleFavorite(song.id)">
+                        <v-btn icon color="purple" :class="{ 'purple--text': isFavorite(song.id) }"
+                            @click.stop="toggleFavorite(song.id)">
                             <v-icon>{{ isFavorite(song.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
                         </v-btn>
                     </v-col>
@@ -32,7 +33,7 @@
                         </div>
                     </v-col>
                     <v-col cols="3" class="text-center">
-                        <v-btn color="" @click="previous" rounded>
+                        <v-btn color="" small @click="previous" rounded>
                             <v-icon>mdi-skip-previous</v-icon>
                         </v-btn>
                     </v-col>
@@ -42,7 +43,7 @@
                         </v-btn>
                     </v-col>
                     <v-col cols="3" class="text-center">
-                        <v-btn color="" @click="next" rounded>
+                        <v-btn color="" small @click="next" rounded>
                             <v-icon>mdi-skip-next</v-icon>
                         </v-btn>
                     </v-col>

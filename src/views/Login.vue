@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card style="background-color: black;" dark>
         <v-container fill-height fluid class="background">
             <v-row align="center" justify="center">
                 <v-col align="center" justify="center" cols="12">
@@ -27,13 +27,15 @@
                             <v-btn type="submit" color="purple lighten-2" @click="logout" block class="mt-2">Log
                                 out</v-btn>
                         </v-card-text>
-                        {{ store.current_user }}
+                        <span class="white--text">Currently logged in: {{ store.current_user }}</span>
                     </v-card>
                 </v-col>
             </v-row>
         </v-container>
     </v-card>
 </template>
+  
+  
  
 <script>
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "@/firebase"

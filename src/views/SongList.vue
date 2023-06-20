@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card style="background-color: black;" dark>
         <div v-if="!isPlayerVisible">
             <v-container class="py-8">
                 <v-row align="center" justify="center">
@@ -31,7 +31,7 @@
                 </v-row>
             </v-container>
             <v-container>
-                <v-list>
+                <v-list style="background-color: #292929;">
                     <v-list-item v-for="(song, songIndex) in list" :key="song.id" @click="playSong(songIndex)">
                         <v-row align="center">
                             <v-col cols="2">
@@ -50,7 +50,7 @@
             </v-container>
 
             <v-container>
-                <v-list>
+                <v-list style="background-color: #292929;">
                     <template v-if="userSongs.length">
                         <h3 class="purple--text mt-6">Added Songs</h3>
                         <v-list-item v-for="(song, songIndex) in userSongs" :key="song.id"

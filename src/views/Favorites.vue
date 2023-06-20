@@ -1,8 +1,8 @@
 <template>
-    <v-card>
+    <v-card style="background-color: black;">
         <v-container>
-            <v-card-title>Favorite Songs</v-card-title>
-            <v-list>
+            <v-card-title><span class="purple--text">Favorite Songs</span></v-card-title>
+            <v-list style="background-color: #292929;">
                 <v-list-item v-for="song in favorites" :key="song.id">
 
                     <v-row align="center">
