@@ -11,9 +11,8 @@
                     </v-col>
                     <!-- TODO search button -->
                     <v-col cols="2">
-                        <v-btn icon :class="{ 'purple--text': checkFavorite(song.id) }"
-                            @click.stop="toggleFavorite(song.id)">
-                            <v-icon>{{ checkFavorite(song.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+                        <v-btn icon :class="{ 'purple--text': isFavorite(song.id) }" @click.stop="toggleFavorite(song.id)">
+                            <v-icon>{{ isFavorite(song.id) ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -50,15 +49,15 @@
                 </v-row>
             </v-container>
         </v-card>
-        <favorites :list="list" @toggle-favorite="toggleFavorite" />
+
     </div>
 </template>
     
     
 <script>
-import Favorites from './Favorites.vue';
+
 import { db, auth } from '@/firebase'; // Adjust the path based on your project structure
-import { collection, doc, getDoc, setDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
 
 export default {
     data() {
@@ -70,11 +69,10 @@ export default {
     },
     name: 'MusicPlayer',
     components: {
-        Favorites
     },
     computed: {
-        isFavorite() {
-            return this.checkFavorite(this.song.id);
+        mergedFavorites() {
+            return [...this.favorites, ...this.localFavorites];
         },
 
     },
@@ -88,7 +86,7 @@ export default {
                     }
                 });
             } else {
-                this.favorites = [];
+                this.localFavorites = [];
             }
         });
     },
@@ -138,8 +136,7 @@ export default {
         async toggleFavorite(songId) {
             const user = auth.currentUser;
             if (user) {
-                const userDocRef = doc(db, 'users', user.uid);
-                const favoritesDocRef = doc(collection(userDocRef, 'favorites'), songId);
+                const favoritesDocRef = doc(db, 'users', user.uid, 'favorites', songId);
                 const isFavorite = await this.checkFavorite(songId);
 
                 if (isFavorite) {
@@ -147,17 +144,25 @@ export default {
                         .then(() => {
                             console.log('Removed from favorites successfully');
                             this.localFavorites = this.localFavorites.filter((song) => song.id !== songId);
-                            this.$emit('toggle-favorite', this.localFavorites); // Emit updated favorites array
                         })
                         .catch((error) => {
                             console.error('Error removing from favorites:', error);
                         });
                 } else {
-                    setDoc(favoritesDocRef, {})
+                    const songData = {
+                        id: this.song.id,
+                        name: this.song.name,
+                        artistName: this.song.artistName,
+                        albumName: this.song.albumName,
+                        year: this.song.year,
+                        src: this.song.src,
+                        songSrc: this.song.songSrc
+                    };
+
+                    setDoc(favoritesDocRef, songData)
                         .then(() => {
                             console.log('Added to favorites successfully');
-                            this.localFavorites.push(this.song);
-                            this.$emit('toggle-favorite', this.localFavorites); // Emit updated favorites array
+                            this.localFavorites.push(songData);
                         })
                         .catch((error) => {
                             console.error('Error adding to favorites:', error);
@@ -170,12 +175,20 @@ export default {
         async checkFavorite(songId) {
             const user = auth.currentUser;
             if (user) {
-                const favoritesDocRef = doc(db, 'users', user.uid, 'favorites', songId);
-                const docSnapshot = await getDoc(favoritesDocRef);
-                return docSnapshot.exists();
+                const favoritesCollectionRef = collection(db, 'users', user.uid, 'favorites');
+                const favoritesSnapshot = await getDocs(favoritesCollectionRef);
+                this.localFavorites = favoritesSnapshot.docs.map((doc) => doc.data());
+                return this.localFavorites.some((song) => song.id === songId);
             } else {
                 return false;
             }
+        },
+        updateFavorites(favorites) {
+            // Emit the updated favorites array to the parent component
+            this.$emit('toggle-favorite', favorites);
+        },
+        isFavorite(songId) {
+            return this.mergedFavorites.some((song) => song.id === songId);
         },
     },
 }

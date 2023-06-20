@@ -78,8 +78,8 @@
             </v-container>
         </div>
         <div v-if="isPlayerVisible">
-            <MusicPlayer :song="selectedUserSong" :favorites="favorites" @goback="isPlayerVisible = !isPlayerVisible"
-                @next="playNext" @previous="playPrevious" />
+            <MusicPlayer :song="selectedUserSong" @goback="isPlayerVisible = !isPlayerVisible" @next="playNext"
+                @previous="playPrevious" />
         </div>
     </v-card>
 </template>  
@@ -119,7 +119,6 @@ export default {
         return {
             isPlayerVisible: false,
             currentSongIndex: 0,
-            favorites: [],
             list: [
                 {
                     id: '1',
