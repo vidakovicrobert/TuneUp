@@ -1,93 +1,101 @@
 <template>
     <v-card style="background-color: black;" dark>
-        <div v-if="!isPlayerVisible">
-            <v-container class="py-8">
-                <v-row align="center" justify="center">
-                    <v-dialog v-model="dialog" :max-width="expanded ? '800px' : '350px'">
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-col cols="8">
-                                <v-btn color="red darken-2" icon v-bind="attrs" v-on="on">
-                                    <v-icon>mdi-playlist-plus</v-icon>
-                                </v-btn>
-                            </v-col>
-                        </template>
-
-                        <v-card class="card-border" outlined>
-                            <v-card-title>Add a Song</v-card-title>
-                            <v-card-text>
-                                <v-file-input v-model="selectedFile" label="Select File" color="gray" outlined
-                                    dense></v-file-input>
-                                <v-btn color="purple lighten-2" @click="submitFile">Submit</v-btn>
-                            </v-card-text>
-
-                        </v-card>
-                    </v-dialog>
-
-                    <v-col cols="4">
-                        <span class="purple--text">Music App</span>
-                    </v-col>
-                    <!-- TODO hamburger menu i dodaci -->
-
-                </v-row>
-            </v-container>
-            <v-container>
-                <v-list style="background-color: #292929;">
-                    <v-list-item v-for="(song, songIndex) in list" :key="song.id" @click="playSong(songIndex)">
-                        <v-row align="center">
-                            <v-col cols="2">
-                                <v-img :src="song.src" height="60" contain></v-img>
-                            </v-col>
-                            <v-col cols="9">
-                                <v-list-item-content>
-                                    <v-list-item-title class="purple--text">{{ song.name }}</v-list-item-title>
-                                    <v-list-item-subtitle class="grey--text text--darken-1">{{ song.artistName }} - {{
-                                        song.albumName }} ({{ song.year }})</v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-col>
-                        </v-row>
-                    </v-list-item>
-                </v-list>
-            </v-container>
-
-            <v-container>
-                <v-list style="background-color: #292929;">
-                    <template v-if="userSongs.length">
-                        <h3 class="purple--text mt-6">Added Songs</h3>
-                        <v-list-item v-for="(song, songIndex) in userSongs" :key="song.id"
-                            @click="playUserSong(list.length + songIndex)">
-                            <v-row align="center">
-                                <v-col cols="2">
-                                    <v-img :src="song.src" height="60" contain></v-img>
+        <v-container>
+            <div v-if="!isPlayerVisible">
+                <v-container>
+                    <v-row align="center" justify="space-between">
+                        <v-col cols="auto">
+                            <v-dialog v-model="dialog" :max-width="expanded ? '400px' : '310px'">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-col>
+                                        <v-btn color="red darken-2" icon v-bind="attrs" v-on="on">
+                                            <v-icon>mdi-playlist-plus</v-icon>
+                                        </v-btn>
+                                    </v-col>
+                                </template>
+                                <v-card class="card-border" outlined dark>
+                                    <v-card-title>Add a Song</v-card-title>
+                                    <v-card-text>
+                                        <v-file-input v-model="selectedFile" label="Select File" outlined
+                                            dense></v-file-input>
+                                        <v-btn color="purple lighten-2" @click="submitFile">Submit</v-btn>
+                                    </v-card-text>
+                                </v-card>
+                            </v-dialog>
+                        </v-col>
+                        <v-col cols="auto">
+                            <v-card-title><span class="purple--text">Tracks</span></v-card-title>
+                        </v-col>
+                        <!-- TODO hamburger menu i dodaci -->
+                    </v-row>
+                </v-container>
+                <v-card class="card-border" outlined>
+                    <v-container>
+                        <v-list align="left" style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
+                            <v-list-item v-for="(song, songIndex) in list" :key="song.id" @click="playSong(songIndex)">
+                                <v-row>
+                                    <v-col cols="2">
+                                        <v-img :src="song.src" height="60" contain></v-img>
+                                    </v-col>
+                                    <v-col cols="6">
+                                        <v-list-item-content>
+                                            <v-list-item-title class="purple--text">{{ song.name
+                                            }}</v-list-item-title>
+                                            <v-list-item-subtitle class="grey--text text--darken-1">{{
+                                                song.artistName
+                                            }} -
+                                                {{
+                                                    song.albumName }} ({{ song.year }})</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-col>
+                                </v-row>
+                            </v-list-item>
+                            <template v-if="userSongs.length">
+                                <v-col>
+                                    <h3 class="purple--text mt-6">Added Songs</h3>
                                 </v-col>
-                                <v-col cols="6">
-                                    <v-list-item-content>
-                                        <v-list-item-title class="purple--text">{{ song.name }}</v-list-item-title>
-                                        <v-list-item-subtitle class="grey--text text--darken-1">{{ song.artistName }} - {{
-                                            song.albumName }} ({{ song.year }})</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-col>
-                                <v-col cols="4">
-                                    <v-btn color="error" icon x-small @click.stop="removeSong(song.id)">
-                                        <v-icon>mdi-delete-outline</v-icon>
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
-                        </v-list-item>
-                    </template>
-                </v-list>
-            </v-container>
-        </div>
-        <div v-if="isPlayerVisible">
-            <MusicPlayer :song="selectedUserSong" @goback="isPlayerVisible = !isPlayerVisible" @next="playNext"
-                @previous="playPrevious" />
-        </div>
+                                <v-list-item v-for="(song, songIndex) in userSongs" :key="song.id"
+                                    @click="playUserSong(list.length + songIndex)">
+                                    <v-row align="center">
+                                        <v-col cols="2">
+                                            <v-img :src="song.src" height="60" contain></v-img>
+                                        </v-col>
+                                        <v-col cols="5">
+                                            <v-list-item-content>
+                                                <v-list-item-title class="purple--text">{{ song.name
+                                                }}</v-list-item-title>
+                                                <v-list-item-subtitle class="grey--text text--darken-1">{{
+                                                    song.artistName
+                                                }} -
+                                                    {{
+                                                        song.albumName }} ({{ song.year }})</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-col>
+                                        <v-col cols="2">
+                                            <v-btn color="error" icon x-small
+                                                @click.stop="removeSong(song.id, song.file.name)">
+                                                <v-icon>mdi-delete-outline</v-icon>
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-list-item>
+                            </template>
+                        </v-list>
+                    </v-container>
+                </v-card>
+            </div>
+            <div v-if="isPlayerVisible">
+                <MusicPlayer :song="selectedUserSong" @goback="isPlayerVisible = !isPlayerVisible" @next="playNext"
+                    @previous="playPrevious" />
+            </div>
+        </v-container>
     </v-card>
 </template>  
 
 <script>
 import { collection, doc, addDoc, onSnapshot, deleteDoc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { db, auth } from '@/firebase.js';
-import { ref, uploadBytes, getDownloadURL, deleteObject, storage } from '@/firebase';
+import { db, auth, ref, uploadBytes, getDownloadURL, deleteObject, storage } from '@/firebase.js';
+
 import MusicPlayer from './MusicPlayer.vue';
 
 
@@ -245,6 +253,8 @@ export default {
                 return;
             }
 
+            const timestamp = Date.now();
+
             const newSong = {
                 id: 'song-' + Date.now(),
                 name: this.selectedFile.name.replace(/^\d+\.\s*/, "").replace(/\.[^.]+$/, ""),
@@ -252,7 +262,7 @@ export default {
                 albumName: '',
                 year: null,
                 src: 'https://source.unsplash.com/random/400x400?date',
-                songSrc: '', // Initialize songSrc
+                songSrc: '',
                 file: this.selectedFile,
             };
 
@@ -289,11 +299,9 @@ export default {
                     console.error('Error uploading file:', error);
                 });
         },
-
-        // FIXED !!! 
-        removeSong(songId) {
+        removeSong(songId, fileName) {
             // Get the currently authenticated user
-            const user = auth.currentUser; // Get the current user from `auth.currentUser`
+            const user = auth.currentUser;
 
             if (user) {
                 // Get a reference to the user's document
@@ -310,12 +318,22 @@ export default {
                         // Remove the song from the userSongs array
                         this.userSongs = this.userSongs.filter((song) => song.id !== songId);
                         localStorage.setItem('userSongs', JSON.stringify(this.userSongs));
+
+                        // Remove the song file from Firebase Storage
+                        const storageRef = ref(storage, `songs/${songId}/${fileName}`);
+                        deleteObject(storageRef)
+                            .then(() => {
+                                console.log('Song file deleted successfully');
+                            })
+                            .catch((error) => {
+                                console.error('Error deleting song file:', error);
+                            });
                     })
                     .catch((error) => {
                         console.error('Error deleting Firestore document:', error);
                     });
             } else {
-                console.error('User is not authenticated'); // Handle the case when the user is not authenticated
+                console.error('User is not authenticated');
             }
         },
 
