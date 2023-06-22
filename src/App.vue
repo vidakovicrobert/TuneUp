@@ -2,56 +2,34 @@
   <v-app>
     <v-app-bar app color dark>
 
-      <!--<v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>-->
-
       <v-toolbar-title>TuneUp</v-toolbar-title>
 
       <v-spacer></v-spacer>
-
+      <!--
       <v-btn value="login" to="/">
         <span>Login</span>
-        <v-icon>mdi-login</v-icon>
+      </v-btn>
+
+      <v-btn value="register" to="/register">
+        <span>Register</span>
       </v-btn>
 
       <v-btn value="songlist" to="/songlist">
         <span>Song List</span>
-        <v-icon>mdi-playlist-music</v-icon>
       </v-btn>
 
       <v-btn value="favorites" to="/favorites">
         <span>Favorites</span>
-        <v-icon>mdi-heart</v-icon>
       </v-btn>
 
       <v-spacer></v-spacer>
-
+      -->
     </v-app-bar>
-
+    <v-spacer></v-spacer>
     <v-main>
-      <router-view class="phone-screen" :list="list" :favorites="favorites" @song-selected="updateList" />
+      <router-view class="phone-screen" :list="list" @song-selected="updateList" />
     </v-main>
-    <!--
-    <v-card>
-      <v-bottom-navigation v-model="activePage" dark>
 
-        <v-btn value="login" to="/">
-          <span>Login</span>
-          <v-icon>mdi-login</v-icon>
-        </v-btn>
-
-        <v-btn value="songlist" to="/songlist">
-          <span>Song List</span>
-          <v-icon>mdi-playlist-music</v-icon>
-        </v-btn>
-
-        <v-btn value="favorites" to="/favorites">
-          <span>Favorites</span>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-
-      </v-bottom-navigation>
-    </v-card>
-    -->
   </v-app>
 </template>  
 
