@@ -10,7 +10,6 @@
                         <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
                 </v-col>
-                <!-- TODO - search button -->
                 <v-col cols="2">
                     <v-btn icon color="purple" :class="{ 'purple--text': isFavorite(song.id) }"
                         @click.stop="toggleFavorite(song.id)">
@@ -74,9 +73,8 @@
 </template>
     
 <script>
-
 import { db, auth } from '@/firebase';
-import { collection, doc, getDocs, setDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
 
 export default {
     data() {
@@ -85,7 +83,7 @@ export default {
             currentSongIndex: 0,
             localFavorites: [],
             showSlider: false,
-            volume: 50, // Initial volume value
+            volume: 50,
             currentTime: 0,
             duration: 0,
             audio: 0,
@@ -154,7 +152,6 @@ export default {
 
             this.isPlaying = !this.isPlaying;
 
-            // Set the audio volume
             this.$refs.audioPlayer.volume = this.volume / 50;
         },
         next() {
