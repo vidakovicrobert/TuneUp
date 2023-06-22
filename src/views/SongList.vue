@@ -5,28 +5,58 @@
                 <v-container>
                     <v-row align="center" justify="space-between">
                         <v-col cols="auto">
-                            <v-dialog v-model="dialog" :max-width="expanded ? '400px' : '310px'">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-col>
-                                        <v-btn color="red darken-2" icon v-bind="attrs" v-on="on">
-                                            <v-icon>mdi-playlist-plus</v-icon>
-                                        </v-btn>
-                                    </v-col>
-                                </template>
-                                <v-card class="card-border" outlined dark>
-                                    <v-card-title>Add a Song</v-card-title>
-                                    <v-card-text>
-                                        <v-file-input v-model="selectedFile" label="Select File" outlined
-                                            dense></v-file-input>
-                                        <v-btn color="purple lighten-2" @click="submitFile">Submit</v-btn>
-                                    </v-card-text>
-                                </v-card>
-                            </v-dialog>
+                            <v-btn color="red darken-2" icon @click.stop="drawer = !drawer">
+                                <v-icon>mdi-menu</v-icon>
+                            </v-btn>
                         </v-col>
+                        <v-navigation-drawer v-model="drawer" absolute left temporary class="rounded-drawer">
+                            <v-list>
+                                <v-list-item>
+                                    <v-list-item-avatar>
+                                        <v-icon>mdi-account</v-icon>
+                                    </v-list-item-avatar>
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ store.current_user }}</v-list-item-title>
+                                        <v-btn type="submit" color="purple lighten-2" small @click="logout" block
+                                            class="mt-2">Log
+                                            out</v-btn>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list>
+
+                            <v-col cols="auto">
+                                <v-col>
+                                    <v-btn value="favorites" to="/favorites" text>
+                                        <v-icon>mdi-heart</v-icon>
+                                        <span>&nbsp;My favorite songs</span>
+                                    </v-btn>
+                                </v-col>
+
+                                <v-dialog v-model="dialog" :max-width="expanded ? '400px' : '310px'">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-col>
+                                            <v-btn v-bind="attrs" v-on="on" text>
+                                                <v-icon>mdi-playlist-plus</v-icon>
+                                                <span>&nbsp;Add a song</span>
+                                            </v-btn>
+                                        </v-col>
+                                    </template>
+
+                                    <v-card class="card-border" outlined dark>
+                                        <v-card-title>Add a Song</v-card-title>
+                                        <v-card-text>
+                                            <v-file-input v-model="selectedFile" label="Select File" outlined
+                                                dense></v-file-input>
+                                            <v-btn color="purple lighten-2" @click="submitFile">Add</v-btn>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-dialog>
+                            </v-col>
+                        </v-navigation-drawer>
+
                         <v-col cols="auto">
-                            <v-card-title><span class="purple--text">Tracks</span></v-card-title>
+                            <v-card-title><span class="purple--text">Songs</span></v-card-title>
                         </v-col>
-                        <!-- TODO hamburger menu i dodaci -->
                     </v-row>
                 </v-container>
                 <v-card class="card-border" outlined>
@@ -50,9 +80,10 @@
                                     </v-col>
                                 </v-row>
                             </v-list-item>
+
                             <template v-if="userSongs.length">
                                 <v-col>
-                                    <h3 class="purple--text mt-6">Added Songs</h3>
+                                    <h3 class="purple--text mt-6">My added songs</h3>
                                 </v-col>
                                 <v-list-item v-for="(song, songIndex) in userSongs" :key="song.id"
                                     @click="playUserSong(list.length + songIndex)">
@@ -93,9 +124,9 @@
 </template>  
 
 <script>
-import { collection, doc, addDoc, onSnapshot, deleteDoc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { db, auth, ref, uploadBytes, getDownloadURL, deleteObject, storage } from '@/firebase.js';
-
+import { collection, doc, onSnapshot, deleteDoc, setDoc } from 'firebase/firestore';
+import { db, auth, ref, uploadBytes, getDownloadURL, deleteObject, storage, signOut } from '@/firebase.js';
+import store from "@/store";
 import MusicPlayer from './MusicPlayer.vue';
 
 
@@ -125,8 +156,15 @@ export default {
     },
     data() {
         return {
+            store: store,
             isPlayerVisible: false,
             currentSongIndex: 0,
+            userSongs: [],
+            selectedUserSong: null,
+            selectedFile: null,
+            dialog: false,
+            expanded: false,
+            drawer: false,
             list: [
                 {
                     id: '1',
@@ -156,11 +194,7 @@ export default {
                     songSrc: `https://filesamples.com/samples/audio/mp3/sample1.mp3`
                 },
             ],
-            userSongs: [],
-            selectedUserSong: null,
-            selectedFile: null,
-            dialog: false,
-            expanded: false,
+
         }
     },
     methods: {
@@ -336,6 +370,16 @@ export default {
                 console.error('User is not authenticated');
             }
         },
+        async logout() {
+            try {
+                let response = await signOut(auth);
+                this.$router.push("/");
+                console.log("SIGN OUT", response);
+            } catch (error) {
+                // Handle logout error
+                console.error(error);
+            }
+        },
 
     },
     components: {
@@ -361,5 +405,9 @@ export default {
 
 .btn-right-margin {
     margin-right: 2%;
+}
+
+.rounded-drawer {
+    border-radius: 0 10px 10px 0;
 }
 </style>
