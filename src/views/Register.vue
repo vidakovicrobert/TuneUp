@@ -1,7 +1,15 @@
 <template>
     <v-card style="background-color: black;" dark>
-        <v-container fill-height fluid class="background">
-            <v-row align="center" justify="center">
+        <v-container class="background">
+            <v-row align="center" justify="space-between">
+                <v-col cols="auto">
+                    <v-btn color="red" icon value="login" to="/" rounded>
+                        <v-icon>mdi-arrow-left</v-icon>
+                    </v-btn>
+                </v-col>
+                <v-col cols="8">
+                    <v-card-title><span class="purple--text">TuneUp</span></v-card-title>
+                </v-col>
                 <v-col align="center" justify="center" cols="12">
                     <v-card class="card-border" width="600px" outlined>
                         <v-card-title align="left">Register</v-card-title>
@@ -24,7 +32,7 @@
                             <v-btn class="btn-right-margin" @click="clearFormData" color="red darken-3" outlined>
                                 CLEAR
                             </v-btn>
-                            <v-btn :disabled="isButtonDisabled" outlined @click="registerUser" color="purple">
+                            <v-btn :disabled="isButtonDisabled" @click="registerUser" color="purple lighten-2">
                                 OK
                             </v-btn>
                         </v-card-actions>
@@ -36,7 +44,7 @@
 </template>
 
 <script>
-import { doc, auth, db, setDoc, docRef, createUserWithEmailAndPassword } from "@/firebase.js";
+import { doc, auth, db, setDoc, createUserWithEmailAndPassword } from "@/firebase.js";
 import { collection } from "@firebase/firestore";
 export default {
     name: "Registration",
