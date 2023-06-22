@@ -2,8 +2,13 @@
     <v-card style="background-color: black;" dark>
         <v-container class="background">
             <v-row align="center" justify="space-between">
+                <v-col cols="3" class="">
+                    <v-btn color="red" icon value="songlist" to="/songlist" rounded>
+                        <v-icon>mdi-arrow-left</v-icon>
+                    </v-btn>
+                </v-col>
                 <v-col cols="auto">
-                    <v-card-title><span class="purple--text">Favorite Songs</span></v-card-title>
+                    <v-card-title><span class="purple--text">Favorite songs</span></v-card-title>
                 </v-col>
             </v-row>
             <v-card class="card-border" outlined v-if="favorites.length > 0">
