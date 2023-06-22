@@ -1,7 +1,10 @@
 <template>
     <v-card style="background-color: black;" dark>
-        <v-container fill-height fluid class="background">
+        <v-container class="background">
             <v-row align="center" justify="center">
+                <v-col cols="auto">
+                    <v-card-title><span class="purple--text">TuneUp</span></v-card-title>
+                </v-col>
                 <v-col align="center" justify="center" cols="12">
                     <v-card class="card-border" outlined>
                         <v-card-title align="left">Login</v-card-title>
@@ -21,24 +24,18 @@
                                 <a href="#" class="text-body-2 font-weight-regular" @click="forgotPassword">Forgot
                                     Password?</a>
                                 <v-btn type="submit" color="purple lighten-2" block class="mt-2">Log in</v-btn>
-                                <p class="text-body-2">Don't have an account? <a href="/Register">Sign Up</a></p>
-
+                                <p class="text-body-2">Don't have an account? <a href="/register">Register</a></p>
                             </v-form>
-                            <v-btn type="submit" color="purple lighten-2" @click="logout" block class="mt-2">Log
-                                out</v-btn>
                         </v-card-text>
-                        <span class="white--text">Currently logged in: {{ store.current_user }}</span>
                     </v-card>
                 </v-col>
             </v-row>
         </v-container>
     </v-card>
 </template>
-  
-  
- 
+
 <script>
-import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "@/firebase"
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "@/firebase"
 import { auth } from "@/firebase.js";
 import store from "@/store";
 
@@ -60,15 +57,6 @@ export default {
         };
     },
     methods: {
-        async logout() {
-            try {
-                let response = await signOut(auth);
-                console.log("SIGN OUT", response);
-            } catch (error) {
-                // Handle logout error
-                console.error(error);
-            }
-        },
         async login() {
             try {
                 let response = await signInWithEmailAndPassword(auth, this.username, this.password)
