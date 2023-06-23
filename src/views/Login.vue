@@ -13,7 +13,7 @@
                         </v-card-subtitle>
                         <v-card-text>
                             <v-form @submit.prevent="login">
-                                <v-text-field v-model="username" dense color="purple" label="Username"
+                                <v-text-field v-model="username" dense color="purple" label="Email"
                                     :rules="[rules.required, rules.email]" outlined></v-text-field>
 
                                 <v-text-field v-model="password" dense color="purple" label="Password"
@@ -43,8 +43,8 @@ export default {
     name: 'Login',
     data() {
         return {
-            username: 'bob@test.com',
-            password: '1234567',
+            username: '',
+            password: '',
             store: store,
             rules: {
                 required: (value) => !!value || "Required.",
