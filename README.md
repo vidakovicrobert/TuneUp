@@ -23,17 +23,21 @@ Mentor: [doc. dr. sc. Nikola Tanković](ntankovic.unipu.hr)
 ### Izgled aplikacije
 
 Prijava i registracija
+
 ![Login](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20Login.png)
 
 ![Register](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20Register%20-%20Copy.png)
 
 Player
+
 ![Songs](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20Songs1%20-%20Copy.png)
 
 ![Music Player](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20MusicPlayer%20-%20Copy.png)
 
 Navigacijska ladica
+
 ![Navigation Drawer](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20NavDrawer%20-%20Copy.png)
 
 Dodavanje pjesme
+
 ![Adding a song](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20AddASong2.2.png)
