@@ -22,14 +22,14 @@ Mentor: [doc. dr. sc. Nikola Tanković](ntankovic.unipu.hr)
 
 ### Izgled aplikacije
 
-[Login](https://github.com/vidakovicrobert/TuneUp/blob/main/src/TuneUp%20-%20Login.png)
+[Login](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20Login.png)
 ---
-[Register](https://github.com/vidakovicrobert/TuneUp/blob/main/src/TuneUp%20-%20Login.png)
+[Register](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20Register%20-%20Copy.png)
 ---
-[Songs](https://github.com/vidakovicrobert/TuneUp/blob/main/src/TuneUp%20-%20Login.png)
+[Songs](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20Songs1%20-%20Copy.png)
 ---
-[Music Player](https://github.com/vidakovicrobert/TuneUp/blob/main/src/TuneUp%20-%20Login.png)
+[Music Player](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20MusicPlayer%20-%20Copy.png)
 ---
-[Navigation Drawer](https://github.com/vidakovicrobert/TuneUp/blob/main/src/TuneUp%20-%20Login.png)
+[Navigation Drawer](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20NavDrawer%20-%20Copy.png)
 ---
-[Adding a song](https://github.com/vidakovicrobert/TuneUp/blob/main/src/TuneUp%20-%20Login.png)
+[Adding a song](https://github.com/vidakovicrobert/TuneUp/blob/main/src/screenshots/TuneUp%20-%20AddASong2.2.png)
